@@ -147,7 +147,7 @@ def clean_output(outs):
         try:
             out = outs[i].split("Answer:")[-1] # remove everything before "Answer:"
             out = out.split("</s>")[0] # remove </s> and everything after
-            out = out.split("\"")[1] # remove quotes, and stuff like "I hope this answer helped!"
+            out = out.split("\"")[1].strip() # remove quotes, and stuff like "I hope this answer helped!"
         except: # something wasn't generated properly, discard
             final_out.append("")
             continue
