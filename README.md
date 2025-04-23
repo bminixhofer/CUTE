@@ -3,10 +3,10 @@
 
 ## CUTE: Character-Level Understanding of Tokens Evaluation
 
-This repo contains our benchmark, CUTE, as detailed in [_CUTE: Measuring LLMs’ Understanding of Their Tokens_](https://arxiv.org/abs/2409.15452).
+This repo contains our benchmark, CUTE, as detailed in [_CUTE: Measuring LLMs’ Understanding of Their Tokens_](https://aclanthology.org/2024.emnlp-main.177/).
 We evaluate LLM's understanding of orthography, finding that most seem to understand spelling pretty well, but aren't as good at manipulating sequences on the character level.
 
-We will present CUTE at EMNLP 2024!
+We presented CUTE at EMNLP 2024, thank you everyone who attended! :)
 
 ## Leaderboard
 
