@@ -1,4 +1,7 @@
 <!-- README.md -->
+
+Fork of CUTE containing training data generation scripts in `gen.sh`. See below for the original README.
+
 # CUTE 🎀
 
 ## CUTE: Character-Level Understanding of Tokens Evaluation
