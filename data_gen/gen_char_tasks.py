@@ -3,6 +3,9 @@ import os
 import argparse
 import random
 
+N = 150000
+N_SKIP = 1000
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--task", type=str, default="spell", help="Benchmark task. Possible values: \
                     {spell, spell_inverse, contains_char, ins_char, del_char, swap_char, sub_char}.")
@@ -30,12 +33,12 @@ def main():
     lines = open("./data_gen/unigram_freq.csv", 'r').readlines()[1:]
 
     for line in lines:
-        if len(inputs) > 1000:
+        if len(inputs) > N + N_SKIP:
             break
 
         word, freq = line.split(",")
         if "rand" in args.task:
-            word = gen_random(len(word))
+            word = gen_random(min(len(word), len(CONSONANTS)))
 
         if len(word) < 3:
             continue
@@ -56,12 +59,11 @@ def main():
                     random_letter = random.choice(list(ALPHABET - letters_in_word))
                 except IndexError:
                     print("The word is", word)
-                    raise IndexError
             else:
                 random_letter = random.choice(list(letters_in_word))
 
             input_all = [random_letter, word]
-        
+
         elif "ins_char" in args.task:
             random_letter = random.choice(list(ALPHABET))
             random_char_in_word = random.choice(list(set(word)))
@@ -96,7 +98,7 @@ def main():
     with open(path+f"{args.task}.tsv", 'w') as f:
         header = "{}label\n".format("".join([f"input{i}\t" for i in range(1, num_inputs+1)]))
         f.write(header)
-        for inp, label in zip(inputs[:1000], labels[:1000]):
+        for inp, label in zip(inputs[N_SKIP:N + N_SKIP], labels[N_SKIP:N + N_SKIP]):
             inputs_str = "\t".join(inp)
             f.write(f"{inputs_str}\t{label}\n")
 

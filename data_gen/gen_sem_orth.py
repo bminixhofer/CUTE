@@ -6,15 +6,19 @@ from nltk.tag import pos_tag
 from Levenshtein import ratio 
 import faiss
 import random
+from tqdm import tqdm
 
-def load_vocab(): # get 10000 most used words longer than 2 chars
+N = 20000
+N_SKIP = 1000
+
+def load_vocab(): # get 100000 most used words longer than 2 chars
     vocab = set()
     with open('./data_gen/unigram_freq.csv', 'r') as f:
         for line in f:
             word, _ = line.split(",")
             if len(word) < 3:
                 continue
-            if len(vocab) == 10000:
+            if len(vocab) == 100000:
                 break
             vocab.add(word.strip())
     return vocab
@@ -29,7 +33,7 @@ def load_fasttext(path):
             vals = np.asarray(values[1:], dtype='float32')
             vectors[word] = vals / np.linalg.norm(vals)
 
-            if i > 50000:
+            if i > 500000:
                 break
     return vectors
 
@@ -88,12 +92,14 @@ def main():
 
     int2str = list(vectors.keys())
 
+    bar = tqdm(total=N + N_SKIP)
+
     # load unigram_freq.csv
     wsos = []    
     with open("./data_gen/unigram_freq.csv", 'r') as f:
         lines = f.readlines()
         for i, line in enumerate(lines[1:]):
-            if len(wsos) >= 1000 or i > 10000:
+            if len(wsos) >= N + N_SKIP:
                 break
             word, freq = line.split(",")
 
@@ -114,6 +120,9 @@ def main():
                 continue
 
             wsos.append(f"{word}\t{sem}\t{orth}")
+            bar.update(1)
+
+    wsos = wsos[N_SKIP:N + N_SKIP]
 
     # swap order of orth and sem so there's no positional bias when prompting
     swapped_wsos = []

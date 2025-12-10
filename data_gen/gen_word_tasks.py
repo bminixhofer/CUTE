@@ -8,6 +8,8 @@ import random
 import argparse
 from sacremoses import MosesTokenizer, MosesDetokenizer
 
+N = 150000
+N_SKIP = 1000
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--task", type=str, default="dupe_word", help="Benchmark task. Possible values: \
@@ -144,7 +146,7 @@ def main():
     with open(path+f"{args.task}.tsv", 'w') as f:
         header = "{}label\n".format("".join([f"input{i}\t" for i in range(1, num_inputs+1)]))
         f.write(header)
-        for inp, label in zip(inputs[:1000], labels[:1000]):
+        for inp, label in zip(inputs[N_SKIP:N_SKIP+N], labels[N_SKIP:N_SKIP+N]):
             inputs_str = "\t".join(inp)
             f.write(f"{inputs_str}\t{label}\n")
 
